@@ -1,3 +1,9 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/main.rb'
+
+arr = [3,-2,6,11,4]
+
+my_each_test = arr.my_each { |element| puts element }
+
+puts my_each_test
