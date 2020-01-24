@@ -3,6 +3,7 @@ GEM
   specs:
     ast (2.4.0)
     coderay (1.1.2)
+    colorize (0.8.1)
     jaro_winkler (1.5.4)
     method_source (0.9.2)
     parallel (1.19.1)
@@ -26,6 +27,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize (~> 0.8.1)
   pry
   rubocop
 
