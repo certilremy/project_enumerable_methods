@@ -55,16 +55,11 @@ module Enumerable
     total
   end
 
-  def my_map(proc = nil)
+  def my_map()
     new_arr = []
-    if proc
-      my_each do |element|
-        new_arr << proc.call(element)
-      end
-    elsif proc.nil? && block_given?
-      my_each do |element|
-        new_arr << yield(element)
-      end
+
+    my_each do |element|
+      new_arr << yield(element)
     end
 
     new_arr
