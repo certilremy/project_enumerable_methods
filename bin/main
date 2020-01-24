@@ -11,3 +11,11 @@ puts(arr.my_all? { |a| a })
 puts(arr.my_any? { |a| a == 2 })
 puts(arr.my_none? { |a| a == 2 })
 puts(arr.inject { |sum, a| sum + a })
+
+def multiply_elns(elements)
+  elements.my_inject(1) do |element, items|
+    element * items
+  end
+end
+
+puts multiply_elns(arr)
