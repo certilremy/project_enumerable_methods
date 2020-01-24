@@ -42,4 +42,9 @@ module Enumerable
   def my_none?
     (my_any? { |i| yield(i) == true }) != true
   end
+
+  def my_inject(s_t)
+    my_each { |i| s_t = yield(s_t, i) }
+    s_t
+  end
 end

@@ -10,3 +10,4 @@ arr.my_select { |element| puts element }
 puts(arr.my_all? { |a| a })
 puts(arr.my_any? { |a| a == 2 })
 puts(arr.my_none? { |a| a == 2 })
+puts(arr.inject { |sum, a| sum + a })
