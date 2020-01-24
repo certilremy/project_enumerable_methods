@@ -30,6 +30,19 @@ module Enumerable
     true
   end
 
+  def my_any?
+    exist = false
+    my_each do |element|
+      exist = yield(element)
+      break if exist
+    end
+    exist
+  end
+
+  def my_none?
+    (my_any? { |i| yield(i) == true }) != true
+  end
+
   def my_count(number = nil)
     total = 0
     if number
@@ -42,17 +55,19 @@ module Enumerable
     total
   end
 
-  def my_any?
-    exist = false
-    my_each do |element|
-      exist = yield(element)
-      break if exist
+  def my_map(proc = nil)
+    new_arr = []
+    if proc
+      my_each do |element|
+        new_arr << proc.call(element)
+      end
+    elsif proc.nil? && block_given?
+      my_each do |element|
+        new_arr << yield(element)
+      end
     end
-    exist
-  end
 
-  def my_none?
-    (my_any? { |i| yield(i) == true }) != true
+    new_arr
   end
 
   def my_inject(s_t)
