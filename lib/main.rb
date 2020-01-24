@@ -38,4 +38,8 @@ module Enumerable
     end
     exist
   end
+
+  def my_none?
+    (my_any? { |i| yield(i) == true }) != true
+  end
 end
