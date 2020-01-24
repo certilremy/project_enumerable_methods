@@ -66,12 +66,17 @@ module Enumerable
         new_arr << yield(element)
       end
     end
-
     new_arr
   end
 
   def my_inject(s_t)
     my_each { |i| s_t = yield(s_t, i) }
     s_t
+  end
+end
+
+def multiply_elns(elements)
+  elements.my_inject(1) do |element, items|
+    element * items
   end
 end
