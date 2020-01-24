@@ -19,3 +19,4 @@ def multiply_elns(elements)
 end
 
 puts multiply_elns(arr)
+puts(arr.my_count { |num| num < 4 })

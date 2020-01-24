@@ -30,6 +30,18 @@ module Enumerable
     true
   end
 
+  def my_count(number = nil)
+    total = 0
+    if number
+      my_each { |element| total += 1 if element == number }
+    elsif block_given?
+      my_each { |element| total += 1 if yield(element) }
+    else
+      total = length
+    end
+    total
+  end
+
   def my_any?
     exist = false
     my_each do |element|
