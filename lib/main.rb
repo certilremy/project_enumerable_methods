@@ -15,4 +15,12 @@ module Enumerable
       element += 1
     end
   end
+
+  def my_select
+    new_array = []
+
+    my_each do |a|
+      yield(a) ? new_array.push(a) : new_array
+    end
+  end
 end

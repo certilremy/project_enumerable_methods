@@ -4,7 +4,6 @@ require_relative '../lib/main.rb'
 
 arr = [3, -2, 6, 11, 4]
 
-my_each_test = arr.my_each { |element| puts element }
-my_each_index_test = arr.my_each_with_index { |index, element| puts "#{index} #{element}" }
-
-
+arr.my_each { |element| puts element }
+arr.my_each_with_index { |index, element| puts "#{index} #{element}" }
+arr.my_select { |element| puts element }
