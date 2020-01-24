@@ -20,6 +20,6 @@ end
 
 puts multiply_elns(arr)
 puts(arr.my_count { |num| num < 4 })
-# puts arr.my_map { |a| a.to_s + '!' }.to_s
+puts arr.my_map { |a| a.to_s + '!' }.to_s
 numbers = proc { |number| number * 6 }
 puts arr.my_map(& numbers).to_s

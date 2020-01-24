@@ -61,6 +61,10 @@ module Enumerable
       my_each do |element|
         new_arr << proc.call(element)
       end
+    elsif proc.nil? && block_given?
+      my_each do |element|
+        new_arr << yield(element)
+      end
     end
 
     new_arr
