@@ -19,3 +19,7 @@ Feel free to change code in the bin/main on your own to test the result.
 
 Certil Remy:
 [Git hub](https://github.com/certilremy) , [Twitter](https://twitter.com/certilremy)
+
+### Contributors
+
+You're welcome just follow the github flow and send pull request.
