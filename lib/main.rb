@@ -18,7 +18,6 @@ module Enumerable
 
   def my_select
     new_array = []
-
     my_each do |a|
       yield(a) ? new_array.push(a) : new_array
     end
@@ -29,5 +28,14 @@ module Enumerable
       return false unless yield(a)
     end
     true
+  end
+
+  def my_any?
+    exist = false
+    my_each do |element|
+      exist = yield(element)
+      break if exist
+    end
+    exist
   end
 end

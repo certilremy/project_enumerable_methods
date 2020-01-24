@@ -2,9 +2,10 @@
 
 require_relative '../lib/main.rb'
 
-arr = [3, -2, 6, 11, 4]
+arr = [3, 2, -2, 6, 11, 4]
 
 arr.my_each { |element| puts element }
 arr.my_each_with_index { |index, element| puts "#{index} #{element}" }
 arr.my_select { |element| puts element }
 puts(arr.my_all? { |a| a })
+puts(arr.my_any? { |a| a == 2 })
