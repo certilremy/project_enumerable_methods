@@ -23,4 +23,11 @@ module Enumerable
       yield(a) ? new_array.push(a) : new_array
     end
   end
+
+  def my_all?
+    my_each do |a|
+      return false unless yield(a)
+    end
+    true
+  end
 end
