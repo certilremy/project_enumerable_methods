@@ -52,21 +52,48 @@ module Enumerable
     true
   end
 
-  def my_any?
-    return unless block_given?
-
-    exist = false
-    my_each do |element|
-      exist = yield(element)
-      break if exist
+  def my_any?(given = nil)
+    if given.class == Regexp
+      my_each do |element|
+        return true unless element.match(given).nil?
+      end
+    elsif given
+      my_each do |element|
+        return true if element.is_a?(given)
+      end
+    elsif block_given?
+      my_each do |element|
+        return true if yield(element)
+      end
+    else
+      my_each do |element|
+        return true if element
+      end
     end
-    exist
+
+    false
   end
 
-  def my_none?
-    return unless block_given?
+  def my_none?(given = nil)
+    if given.is_a?(Regexp)
+      my_each do |element|
+        return false unless element.match(given).nil?
+      end
+    elsif given
+      my_each do |element|
+        return false if element.is_a?(given)
+      end
+    elsif block_given?
+      my_each do |element|
+        return false if yield(element)
+      end
+    else
+      my_each do |element|
+        return false if element
+      end
+    end
 
-    (my_any? { |i| yield(i) == true }) != true
+    true
   end
 
   def my_count(number = nil)
