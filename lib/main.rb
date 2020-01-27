@@ -112,7 +112,7 @@ module Enumerable
 
   def my_map(proc = nil)
     new_arr = []
-    return unless block_given?
+    return enum_for(:my_map) unless block_given?
 
     if proc
       my_each do |element|
@@ -126,11 +126,37 @@ module Enumerable
     new_arr
   end
 
-  def my_inject(s_t)
-    return unless block_given?
+  def my_inject(*args)
+    arr = to_a
+    from_start = 0
+    sym = nil
+    result = nil
 
-    my_each { |i| s_t = yield(s_t, i) }
-    s_t
+    args.my_each do |argument|
+      if argument.is_a? Numeric
+        from_start = argument
+      else
+        sym = argument
+      end
+    end
+    return enum_for(:my_inject) unless block_given? || !sym.nil?
+
+    result = arr[from_start]
+    arr.delete_at(from_start)
+
+    if sym
+      return arr[-1] if sym.to_s == '='
+
+      arr.my_each do |element|
+        result = result.send(sym.to_s, element)
+      end
+    else
+      arr.my_each do |element|
+        result = yield(result, element)
+      end
+    end
+
+    result
   end
 end
 
