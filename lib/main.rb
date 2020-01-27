@@ -1,6 +1,6 @@
 module Enumerable
   def my_each
-    return unless block_given?
+    return enum_for(:my_each) unless block_given?
 
     element = 0
     while element < length
@@ -11,7 +11,7 @@ module Enumerable
   end
 
   def my_each_with_index
-    return unless block_given?
+    return enum_for(:my_each_with_index) unless block_given?
 
     element = 0
     while element < length
@@ -21,20 +21,34 @@ module Enumerable
   end
 
   def my_select
+    return enum_for(:my_select) unless block_given?
+
     new_array = []
-    return unless block_given?
 
     my_each do |a|
       yield(a) ? new_array.push(a) : new_array
     end
   end
 
-  def my_all?
-    return unless block_given?
-
-    my_each do |a|
-      return false unless yield(a)
+  def my_all?(given = nil)
+    if given.class == Regexp
+      my_each do |element|
+        return false unless element.match(given)
+      end
+    elsif given
+      my_each do |element|
+        return false unless element.is_a?(given)
+      end
+    elsif block_given?
+      my_each do |element|
+        return false unless yield(element)
+      end
+    else
+      my_each do |element|
+        return false unless element
+      end
     end
+
     true
   end
 
