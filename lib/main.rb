@@ -1,5 +1,7 @@
 module Enumerable
   def my_each
+    return unless block_given?
+
     element = 0
     while element < length
       yield(self[element])
@@ -9,6 +11,8 @@ module Enumerable
   end
 
   def my_each_with_index
+    return unless block_given?
+
     element = 0
     while element < length
       yield(self[element], element)
@@ -18,12 +22,16 @@ module Enumerable
 
   def my_select
     new_array = []
+    return unless block_given?
+
     my_each do |a|
       yield(a) ? new_array.push(a) : new_array
     end
   end
 
   def my_all?
+    return unless block_given?
+
     my_each do |a|
       return false unless yield(a)
     end
@@ -31,6 +39,8 @@ module Enumerable
   end
 
   def my_any?
+    return unless block_given?
+
     exist = false
     my_each do |element|
       exist = yield(element)
@@ -40,10 +50,14 @@ module Enumerable
   end
 
   def my_none?
+    return unless block_given?
+
     (my_any? { |i| yield(i) == true }) != true
   end
 
   def my_count(number = nil)
+    return total = lenght unless block_given?
+
     total = 0
     if number
       my_each { |element| total += 1 if element == number }
@@ -57,6 +71,8 @@ module Enumerable
 
   def my_map(proc = nil)
     new_arr = []
+    return unless block_given?
+
     if proc
       my_each do |element|
         new_arr << proc.call(element)
@@ -70,6 +86,8 @@ module Enumerable
   end
 
   def my_inject(s_t)
+    return unless block_given?
+
     my_each { |i| s_t = yield(s_t, i) }
     s_t
   end

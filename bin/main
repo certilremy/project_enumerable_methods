@@ -8,6 +8,8 @@ arr = [3, 2, -2, 6, 11, 4]
 puts arr.to_s.colorize(:yellow)
 puts 'my_each :'.colorize(:red)
 arr.my_each { |element| puts element }
+puts 'my_each without block:'.colorize(:red)
+puts arr.my_each
 puts 'my_each_with_index :'.colorize(:red)
 arr.my_each_with_index { |index, element| puts "#{index} #{element}" }
 puts 'my_select :'.colorize(:red)
@@ -24,6 +26,8 @@ puts 'multiply_elns result:'.colorize(:red)
 puts multiply_elns(arr)
 puts 'my_count:'.colorize(:red)
 puts(arr.my_count { |num| num < 4 })
+puts 'my count without block:'.colorize(:red)
+puts arr.count
 puts 'my_map_without_proc:'.colorize(:red)
 puts arr.my_map { |a| a.to_s + '!' }.to_s
 puts 'my_map_with_proc'.colorize(:red)
