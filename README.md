@@ -12,7 +12,7 @@ $ bundle
 In your terminal while at the root of the project to ensure all gem are installed.
  
  ## Using the methods
-There already some examples of code how to use the methods in the 
+There are already some examples of code how to use the methods in the 
 ```
 bin/main 
 ```
@@ -24,7 +24,7 @@ To start it just run:
 ```ruby
 ruby bin/main
 ```
-Feel free to change code in the bin/main on your own to test the result.
+You can change code in the bin/main on your own to test the result in the console.
 
 ## Author 
 
