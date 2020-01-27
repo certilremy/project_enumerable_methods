@@ -97,7 +97,7 @@ module Enumerable
   end
 
   def my_count(number = nil)
-    return total = lenght unless block_given?
+    return total = length unless block_given?
 
     total = 0
     if number
