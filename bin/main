@@ -37,3 +37,5 @@ test_sym = arr.my_inject(&:+) != [1, 2, 3, 4, 5].inject(&:+)
 puts test_sym
 test_true = %w[saheed oladele suretrust].my_none?(5) != %w[saheed oladele suretrust].none?(5)
 puts test_true
+range = Range.new(5, 50)
+p range.my_inject(4) { |prod, n| prod * n }

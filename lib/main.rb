@@ -153,7 +153,7 @@ module Enumerable
         end
         ind
       else
-        "undefined method for #{ind}:#{ind.class}"
+        "undefined method for #{given}:#{given.class}"
       end
     else
       'no block given (LocalJumpError)'
