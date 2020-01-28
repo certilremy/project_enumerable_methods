@@ -21,91 +21,79 @@ module Enumerable
   end
 
   def my_select
-    return enum_for(:my_select) unless block_given?
-
-    new_array = []
-
-    my_each do |a|
-      yield(a) ? new_array.push(a) : new_array
+    array = []
+    if block_given?
+      my_each { |a| array.push(a) if yield(a) }
+      array
+    else
+      to_enum(:my_select)
     end
   end
 
   def my_all?(given = nil)
-    if given.class == Regexp
-      my_each do |element|
-        return false unless element.match(given)
-      end
+    if block_given?
+      my_each { |x| return false unless yield(x) }
+      true
     elsif given
-      my_each do |element|
-        return false unless element.is_a?(given)
-      end
-    elsif block_given?
-      my_each do |element|
-        return false unless yield(element)
+      if given.is_a? Regexp
+        my_each { |x| return false unless x =~ given }
+      elsif given.is_a? Class
+        my_each { |x| return false unless x.is_a? given }
+      else
+        my_each { |x| return false unless x == given }
       end
     else
-      my_each do |element|
-        return false unless element
-      end
+      my_each { |x| return false unless x }
     end
-
     true
   end
 
   def my_any?(given = nil)
-    if given.class == Regexp
-      my_each do |element|
-        return true unless element.match(given).nil?
-      end
+    if block_given?
+      my_each { |x| return true if yield(x) }
+      false
     elsif given
-      my_each do |element|
-        return true if element.is_a?(given)
-      end
-    elsif block_given?
-      my_each do |element|
-        return true if yield(element)
+      if given.is_a? Regexp
+        my_each { |x| return true if x =~ given }
+      elsif given.is_a? Class
+        my_each { |x| return true if x.is_a? given }
+      else
+        my_each { |x| return true if x == given }
       end
     else
-      my_each do |element|
-        return true if element
-      end
+      my_each { |x| return true if x }
     end
-
     false
   end
 
   def my_none?(given = nil)
-    if given.is_a?(Regexp)
-      my_each do |element|
-        return false unless element.match(given).nil?
-      end
+    if block_given?
+      my_each { |x| return false if yield(x) }
+      true
     elsif given
-      my_each do |element|
-        return false if element.is_a?(given)
-      end
-    elsif block_given?
-      my_each do |element|
-        return false if yield(element)
+      if given.is_a? Regexp
+        my_each { |x| return false if x =~ given }
+      elsif given.is_a? Class
+        my_each { |x| return false if x.is_a? given }
+      else
+        my_each { |x| return false if x == given }
       end
     else
-      my_each do |element|
-        return false if element
-      end
+      my_each { |x| return false if x }
     end
-
     true
   end
 
   def my_count(number = nil)
-    return total = length unless block_given?
-
     total = 0
-    if number
-      my_each { |element| total += 1 if element == number }
-    elsif block_given?
-      my_each { |element| total += 1 if yield(element) }
+    if block_given?
+      my_each { |x| total += 1 if yield(x) }
+    elsif number.nil?
+      my_each do |_|
+        total += 1
+      end
     else
-      total = length
+      my_each { |x| total += 1 if number == x }
     end
     total
   end
@@ -126,37 +114,50 @@ module Enumerable
     new_arr
   end
 
-  def my_inject(*args)
-    arr = to_a
-    from_start = 0
-    sym = nil
-    result = nil
-
-    args.my_each do |argument|
-      if argument.is_a? Numeric
-        from_start = argument
-      else
-        sym = argument
+  def my_inject(given = self[0], symbol = nil)
+    if block_given?
+      given ||= 0
+      index = 1
+      while index < length
+        given = yield(given, self[index])
+        index += 1
       end
-    end
-    return enum_for(:my_inject) unless block_given? || !sym.nil?
-
-    result = arr[from_start]
-    arr.delete_at(from_start)
-
-    if sym
-      return arr[-1] if sym.to_s == '='
-
-      arr.my_each do |element|
-        result = result.send(sym.to_s, element)
+      given
+    elsif (given.is_a? Symbol) || (symbol.is_a? Symbol)
+      if given.is_a? Symbol
+        case given
+        when :+
+          total = 0
+          my_each { |x| total += x }
+        when :-
+          total = self[0]
+          self[1..-1].my_each { |x| total -= x }
+        when :*
+          total = self[0]
+          self[1..-1].my_each { |x| total *= x }
+        when :/
+          total = self[0]
+          self[1..-1].my_each { |x| total /= x }
+        end
+        total
+      elsif given.is_a? Numeric
+        case symbol
+        when :+
+          to_a.my_each { |x| given += x }
+        when :-
+          to_a.my_each { |x| given -= x }
+        when :*
+          to_a.my_each { |x| given *= x }
+        when :/
+          to_a.my_each { |x| given /= x }
+        end
+        ind
+      else
+        'method error'
       end
     else
-      arr.my_each do |element|
-        result = yield(result, element)
-      end
+      'block not found'
     end
-
-    result
   end
 end
 

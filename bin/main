@@ -33,3 +33,5 @@ puts arr.my_map { |a| a.to_s + '!' }.to_s
 puts 'my_map_with_proc'.colorize(:red)
 numbers = proc { |number| number * 6 }
 puts arr.my_map(& numbers).to_s
+test_sym = arr.my_inject(&:+) != [1, 2, 3, 4, 5].inject(&:+)
+puts test_sym
