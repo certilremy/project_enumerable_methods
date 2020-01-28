@@ -153,10 +153,10 @@ module Enumerable
         end
         ind
       else
-        'method error'
+        "undefined method for #{ind}:#{ind.class}"
       end
     else
-      'block not found'
+      'no block given (LocalJumpError)'
     end
   end
 end
