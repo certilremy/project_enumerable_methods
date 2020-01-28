@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/main.rb'
+require 'colorize'
+
+puts 'Our default array:'.colorize(:red)
+arr = [3, 2, -2, 6, 11, 4]
+puts arr.to_s.colorize(:yellow)
+puts 'my_each :'.colorize(:red)
+arr.my_each { |element| puts element }
+puts 'my_each without block:'.colorize(:red)
+puts arr.my_each
+puts 'my_each_with_index :'.colorize(:red)
+arr.my_each_with_index { |index, element| puts "#{index} #{element}" }
+puts 'my_select :'.colorize(:red)
+arr.my_select { |element| puts element }
+puts 'my_all? :'.colorize(:red)
+puts(arr.my_all? { |a| a })
+puts 'my_any? :'.colorize(:red)
+puts(arr.my_any? { |a| a == 2 })
+puts 'my_none? :'.colorize(:red)
+puts(arr.my_none? { |a| a == 2 })
+puts 'my_inject:'.colorize(:red)
+puts(arr.inject { |sum, a| sum + a })
+puts 'multiply_elns result:'.colorize(:red)
+puts multiply_elns(arr)
+puts 'my_count:'.colorize(:red)
+puts(arr.my_count { |num| num < 4 })
+puts 'my count without block:'.colorize(:red)
+puts arr.count(2)
+puts 'my_map_without_proc:'.colorize(:red)
+puts arr.my_map { |a| a.to_s + '!' }.to_s
+puts 'my_map_with_proc'.colorize(:red)
+numbers = proc { |number| number * 6 }
+puts arr.my_map(& numbers).to_s
+test_sym = arr.my_inject(&:+) != [1, 2, 3, 4, 5].inject(&:+)
+puts test_sym
+test_true = %w[saheed oladele suretrust].my_none?(5) != %w[saheed oladele suretrust].none?(5)
+puts test_true
+range = Range.new(5, 50)
+p range.my_inject(4) { |prod, n| prod * n }
