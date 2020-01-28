@@ -35,3 +35,5 @@ numbers = proc { |number| number * 6 }
 puts arr.my_map(& numbers).to_s
 test_sym = arr.my_inject(&:+) != [1, 2, 3, 4, 5].inject(&:+)
 puts test_sym
+test_true = %w[saheed oladele suretrust].my_none?(5) != %w[saheed oladele suretrust].none?(5)
+puts test_true
