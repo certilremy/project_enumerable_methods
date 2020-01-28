@@ -114,50 +114,27 @@ module Enumerable
     new_arr
   end
 
-  def my_inject(given = self[0], symbol = nil)
-    if block_given?
-      given ||= 0
-      index = 1
-      while index < length
-        given = yield(given, self[index])
-        index += 1
-      end
-      given
-    elsif (given.is_a? Symbol) || (symbol.is_a? Symbol)
-      if given.is_a? Symbol
-        case given
-        when :+
-          total = 0
-          my_each { |x| total += x }
-        when :-
-          total = self[0]
-          self[1..-1].my_each { |x| total -= x }
-        when :*
-          total = self[0]
-          self[1..-1].my_each { |x| total *= x }
-        when :/
-          total = self[0]
-          self[1..-1].my_each { |x| total /= x }
-        end
-        total
-      elsif given.is_a? Numeric
-        case symbol
-        when :+
-          to_a.my_each { |x| given += x }
-        when :-
-          to_a.my_each { |x| given -= x }
-        when :*
-          to_a.my_each { |x| given *= x }
-        when :/
-          to_a.my_each { |x| given /= x }
-        end
-        ind
-      else
-        "undefined method for #{given}:#{given.class}"
-      end
+  def my_inject(*args)
+    arr = to_a.dup
+    if args[0].nil?
+      result = arr.shift
+    elsif args[1].nil? && !block_given?
+      symbol = args[0]
+      result = arr.shift
+    elsif args[1].nil? && block_given?
+      result = args[0]
     else
-      'no block given (LocalJumpError)'
+      result = args[0]
+      symbol = args[1]
     end
+    arr[0..-1].my_each do |i|
+      result = if symbol
+                 result.send(symbol, i)
+               else
+                 yield(result, i)
+               end
+    end
+    result
   end
 end
 
