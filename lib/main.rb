@@ -11,24 +11,36 @@ module Enumerable
   end
 
   def my_each_with_index
-    return enum_for(:my_each_with_index) unless block_given?
+    return to_enum(:my_each_with_index) unless block_given?
 
-    element = 0
-    while element < length
-      yield(self[element], element)
-      element += 1
+    if self.class == Array
+      0.upto(length - 1) do |index|
+        yield(self[index], index)
+      end
+    elsif self.class == Hash
+      keys = self.keys
+      keys.length.times do |i|
+        key = keys[i]
+        value = self[key]
+        key_value = [key, value]
+        yield(key_value, i)
+      end
     end
+    self
   end
 
   def my_select
-    array = []
-    if block_given?
-      my_each { |a| array.push(a) if yield(a) }
-      array
-    else
-      to_enum(:my_select)
+    return enum_for(:my_select) unless block_given?
+
+    return_array = []
+
+    my_each do |element|
+      return_array << element if yield(element)
     end
+
+    return_array
   end
+
 
   def my_all?(given = nil)
     if block_given?
