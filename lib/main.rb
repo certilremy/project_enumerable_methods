@@ -108,7 +108,7 @@ module Enumerable
     end
     total
   end
-  
+
   def my_map(proc = nil)
     return to_enum(:my_map) if !block_given? && proc.nil?
 
@@ -150,7 +150,7 @@ module Enumerable
   end
 end
 
-def multiply_elns(elements)
+def multiply_els(elements)
   elements.my_inject(1) do |element, items|
     element * items
   end

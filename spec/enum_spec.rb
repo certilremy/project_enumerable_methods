@@ -7,6 +7,7 @@ describe Enumerable do
   let(:empyt_hash) { {} }
   let(:oft) { [1, 5, 2] }
   let(:ofe) { [1, 5, 8] }
+
   let(:onilt) { [1, nil, 2] }
   let(:ofalset) { [1, false, 2] }
   let(:arrfour) { [1, 2, 4, 5] }
@@ -196,33 +197,81 @@ describe Enumerable do
     it 'block and proc not given' do
       expect(oft.my_map.class).to eq(Enumerator)
     end
-  
+
     it 'maps array with block' do
       expect(arrfour.my_map { |n| n + 2 }).to eq([3, 4, 6, 7])
     end
-  
+
     it 'maps array with proc' do
       proc = proc { |n| n + 3 }
       expect(arrfour.my_map(proc)).to eq([4, 5, 7, 8])
     end
-  
+
     it 'maps array with proc and block' do
       proc = proc { |n| n + 3 }
       expect(arrfour.my_map(proc) { |n| n + 2 }).to eq([4, 5, 7, 8])
     end
-  
+
     it 'maps hash with block' do
       expect(hashnum.my_map { |k, v| k.to_s + v.to_s }).to eq(%w[a1 b2 c0])
     end
-  
+
     it 'maps hash with proc' do
       proc = proc { |_k, v| v + 3 }
       expect(hashnum.my_map(proc)).to eq([4, 5, 3])
     end
-  
+
     it 'maps hash with proc and block' do
       proc = proc { |_k, v| v + 3 }
       expect(hashnum.my_map(proc) { |_k, v| v + 2 }).to eq([4, 5, 3])
+    end
+  end
+
+  describe 'my_inject' do
+    let(:arr_2) { [1, 2, 3, 4] }
+    it 'sums' do
+      expect(arr_2.my_inject(:+)).to eq arr_2.inject(:+)
+    end
+    it 'sums with a starting point' do
+      expect(arrfour.my_inject(10) { |sum, n| sum + n }).to eq(22)
+    end
+    it 'sums arrays' do
+      expect(arrfour.my_inject { |sum, n| sum + n }).to eq(12)
+    end
+    it 'sums ranges' do
+      expect((1..5).my_inject { |sum, n| sum + n }).to eq(15)
+    end
+    it 'substracts with a starting point' do
+      expect(arrfour.my_inject(10) { |substract, n| substract - n }).to eq(-2)
+    end
+    it 'substracts arrays' do
+      expect(arrfour.my_inject { |substract, n| substract - n }).to eq(-10)
+    end
+    it 'substracts ranges' do
+      expect((1..5).my_inject { |substract, n| substract - n }).to eq(-13)
+    end
+    it 'multiplies with a starting point' do
+      expect(arrfour.my_inject(10) { |multiplies, n| multiplies * n }).to eq(400)
+    end
+    it 'multiplies arrays' do
+      expect(arrfour.my_inject { |multiplies, n| multiplies * n }).to eq(40)
+    end
+    it 'multiplies ranges' do
+      expect((1..5).my_inject { |multiplies, n| multiplies * n }).to eq(120)
+    end
+    it 'divides with a starting point' do
+      expect(arrfour.my_inject(10.2) { |divides, n| divides / n }).to eq(0.255)
+    end
+    it 'divides arrays' do
+      expect(arrfour.my_inject { |divides, n| divides / n }).to eq(0)
+    end
+    it 'divides ranges' do
+      expect((1..5).my_inject { |divides, n| divides / n }).to eq(0)
+    end
+  end
+  describe 'multiply_els' do
+    it 'using my_inject' do
+      expect(multiply_els([2, 4, 5])).to eq(40)
     end
   end
 end
