@@ -151,7 +151,7 @@ describe Enumerable do
     it 'pattern other than a Class or Regex' do
       expect(dogs.my_none?('dog')).to eq(false)
     end
-   
+
     it 'Class, false' do
       expect(dogs.my_none?(String)).to eq(false)
     end
