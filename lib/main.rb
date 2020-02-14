@@ -108,21 +108,22 @@ module Enumerable
     end
     total
   end
-
+  
   def my_map(proc = nil)
-    new_arr = []
-    return enum_for(:my_map) unless block_given?
+    return to_enum(:my_map) if !block_given? && proc.nil?
 
-    if proc
-      my_each do |element|
-        new_arr << proc.call(element)
+    map_items = []
+
+    if !proc.nil?
+      my_each_with_index do |n, i|
+        map_items [i] = proc.call(n)
       end
-    elsif proc.nil? && block_given?
-      my_each do |element|
-        new_arr << yield(element)
+    else
+      my_each_with_index do |n, i|
+        map_items [i] = yield n
       end
     end
-    new_arr
+    map_items
   end
 
   def my_inject(*args)

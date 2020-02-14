@@ -191,4 +191,38 @@ describe Enumerable do
       expect(oft.my_count(2)).to eq(1)
     end
   end
+
+  describe 'my_map' do
+    it 'block and proc not given' do
+      expect(oft.my_map.class).to eq(Enumerator)
+    end
+  
+    it 'maps array with block' do
+      expect(arrfour.my_map { |n| n + 2 }).to eq([3, 4, 6, 7])
+    end
+  
+    it 'maps array with proc' do
+      proc = proc { |n| n + 3 }
+      expect(arrfour.my_map(proc)).to eq([4, 5, 7, 8])
+    end
+  
+    it 'maps array with proc and block' do
+      proc = proc { |n| n + 3 }
+      expect(arrfour.my_map(proc) { |n| n + 2 }).to eq([4, 5, 7, 8])
+    end
+  
+    it 'maps hash with block' do
+      expect(hashnum.my_map { |k, v| k.to_s + v.to_s }).to eq(%w[a1 b2 c0])
+    end
+  
+    it 'maps hash with proc' do
+      proc = proc { |_k, v| v + 3 }
+      expect(hashnum.my_map(proc)).to eq([4, 5, 3])
+    end
+  
+    it 'maps hash with proc and block' do
+      proc = proc { |_k, v| v + 3 }
+      expect(hashnum.my_map(proc) { |_k, v| v + 2 }).to eq([4, 5, 3])
+    end
+  end
 end
