@@ -52,4 +52,43 @@ describe Enumerable do
       expect(%i[foo bar foo].my_select { |x| x == :foo }).to eql(%i[foo foo])
     end
   end
+
+  describe 'my_all?' do
+    it 'block not given, none of the elements false or nil' do
+      expect([1, 5, 2].my_all?).to eq(true)
+    end
+    it 'block not given, one of the elements false or nil' do
+      expect([1, nil, 2].my_all?).to eq(false)
+    end
+    it 'block not given, one of the elements false' do
+      expect([1, false, 2].my_all?).to eq(false)
+    end
+    it 'block not given, one of the elements nil' do
+      expect([1, 5, nil].my_all?).to eq(false)
+    end
+    it 'pattern other than a Class or Regex' do
+      expect(%w[dog dog dog dog].my_all?('dog')).to eq(true)
+    end
+    it 'pattern other than a Class or Regex, false' do
+      expect(%w[dog dog cat dog].my_all?('dog')).to eq(false)
+    end
+    it 'class given, all the elements from that class' do
+      expect([1, 5, 8].my_all?(Integer)).to eq(true)
+    end
+    it 'class given, not all the elements from that class' do
+      expect([1, 5, 8].my_all?(String)).to eq(false)
+    end
+    it 'all with array false' do
+      expect([1, 2, 4, 5].my_all? { |n| n > 3 }).to eq(false)
+    end
+    it 'all with array true' do
+      expect([1, 2, 4, 5].my_all? { |n| n >= 1 }).to eq(true)
+    end
+    it 'all with hash false' do
+      expect({ a: 1, b: 2, c: 0 }.my_all? { |_k, v| v == 2 }).to eq(false)
+    end
+    it 'all with hash true' do
+      expect({ a: 1, b: 2, c: 0 }.my_all? { |_k, v| v.is_a? Integer }).to eq(true)
+    end
+  end
 end
