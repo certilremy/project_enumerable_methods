@@ -11,13 +11,22 @@ module Enumerable
   end
 
   def my_each_with_index
-    return enum_for(:my_each_with_index) unless block_given?
+    return to_enum(:my_each_with_index) unless block_given?
 
-    element = 0
-    while element < length
-      yield(self[element], element)
-      element += 1
+    if self.class == Array
+      0.upto(length - 1) do |index|
+        yield(self[index], index)
+      end
+    elsif self.class == Hash
+      keys = self.keys
+      keys.length.times do |i|
+        key = keys[i]
+        value = self[key]
+        key_value = [key, value]
+        yield(key_value, i)
+      end
     end
+    self
   end
 
   def my_select
