@@ -2,32 +2,43 @@ module Enumerable
   def my_each
     return enum_for(:my_each) unless block_given?
 
-    element = 0
-    while element < length
-      yield(self[element])
-      element += 1
+    return_array = to_a
+
+    (0...return_array.length).each do |i|
+      return_array[i] = yield(return_array[i])
+    end
+    return_array
+  end
+
+  def my_each_with_index
+    return to_enum(:my_each_with_index) unless block_given?
+
+    if self.class == Array
+      0.upto(length - 1) do |index|
+        yield(self[index], index)
+      end
+    elsif self.class == Hash
+      keys = self.keys
+      keys.length.times do |i|
+        key = keys[i]
+        value = self[key]
+        key_value = [key, value]
+        yield(key_value, i)
+      end
     end
     self
   end
 
-  def my_each_with_index
-    return enum_for(:my_each_with_index) unless block_given?
-
-    element = 0
-    while element < length
-      yield(self[element], element)
-      element += 1
-    end
-  end
-
   def my_select
-    array = []
-    if block_given?
-      my_each { |a| array.push(a) if yield(a) }
-      array
-    else
-      to_enum(:my_select)
+    return enum_for(:my_select) unless block_given?
+
+    return_array = []
+
+    my_each do |element|
+      return_array << element if yield(element)
     end
+
+    return_array
   end
 
   def my_all?(given = nil)
@@ -99,19 +110,20 @@ module Enumerable
   end
 
   def my_map(proc = nil)
-    new_arr = []
-    return enum_for(:my_map) unless block_given?
+    return to_enum(:my_map) if !block_given? && proc.nil?
 
-    if proc
-      my_each do |element|
-        new_arr << proc.call(element)
+    map_items = []
+
+    if !proc.nil?
+      my_each_with_index do |n, i|
+        map_items [i] = proc.call(n)
       end
-    elsif proc.nil? && block_given?
-      my_each do |element|
-        new_arr << yield(element)
+    else
+      my_each_with_index do |n, i|
+        map_items [i] = yield n
       end
     end
-    new_arr
+    map_items
   end
 
   def my_inject(*args)
@@ -138,7 +150,7 @@ module Enumerable
   end
 end
 
-def multiply_elns(elements)
+def multiply_els(elements)
   elements.my_inject(1) do |element, items|
     element * items
   end
