@@ -14,7 +14,6 @@ describe Enumerable do
   let(:dogcat) { %w[dog dog cat dog] }
   let(:arrwords) { %w[dog door rod blade] }
 
-
   describe '#my_each' do
     it 'return enumerator if block not given' do
       expect(arr.my_each.class).to eq(Enumerator)
@@ -62,7 +61,6 @@ describe Enumerable do
     end
   end
 
-  
   describe 'my_all?' do
     it 'block not given, none of the elements false or nil' do
       expect(oft.my_all?).to eq(true)
@@ -106,38 +104,71 @@ describe Enumerable do
     it 'block not given, any of the elements not false or nil' do
       expect([nil, false, nil, 1].my_any?).to eq(true)
     end
-  
+
     it 'block not given, all of the elements false or nil' do
       expect([nil, false, nil].my_any?).to eq(false)
     end
-  
+
     it 'pattern other than a Class or Regex' do
       expect(arrwords.my_any?('dog')).to eq(true)
     end
-  
+
     it 'class given, any of the elements from that class' do
       expect([1, '5', 8].my_any?(Integer)).to eq(true)
     end
-  
+
     it 'class given, none of the elements from that class' do
       expect(ofe.my_any?(String)).to eq(false)
     end
-  
+
     it 'any with array true' do
       expect([1, 2, 4, 5].my_any? { |n| n > 3 }).to eq(true)
     end
-  
+
     it 'any with array false' do
       expect([1, 2, 4, 5].my_any? { |n| n < 1 }).to eq(false)
     end
-  
+
     it 'any with hash false' do
       expect({ a: 1, b: 2, c: 0 }.my_any? { |_k, v| v > 20 }).to eq(false)
     end
-  
+
     it 'any with hash true' do
       expect({ a: 1, b: 2, c: 0 }.my_any? { |_k, v| v.is_a? Integer }).to eq(true)
     end
   end
-  
+
+  describe 'my_none?' do
+    it 'a' do
+      expect([nil].my_none?).to eq(true)
+    end
+    it 'b' do
+      expect([nil, false, true].my_none?).to eq(false)
+    end
+    it 'pattern other than a Class or Regex' do
+      expect(dogs.my_none?('cat')).to eq(true)
+    end
+    it 'pattern other than a Class or Regex' do
+      expect(dogs.my_none?('dog')).to eq(false)
+    end
+   
+    it 'Class, false' do
+      expect(dogs.my_none?(String)).to eq(false)
+    end
+    it 'Class, true' do
+      expect(dogs.my_none?(Integer)).to eq(true)
+    end
+    it 'none with array true' do
+      expect(dogs.none? { |word| word.length == 4 }).to eq(true)
+    end
+    it 'none with array false' do
+      expect(%w[ant bear cat].none? { |word| word.length >= 4 }).to eq(false)
+    end
+    it 'none with hash true' do
+      expect({ a: 1, b: 2, c: 0 }.my_none? { |_k, v| v == 7 }).to eq(true)
+    end
+    it 'none with hash false' do
+      expect({ a: 1, b: 2, c: 0 }.my_none? { |_k, v| v.is_a? Integer }).to eq(false)
+    end
+  end
 end

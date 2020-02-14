@@ -41,7 +41,6 @@ module Enumerable
     return_array
   end
 
-
   def my_all?(given = nil)
     if block_given?
       my_each { |x| return false unless yield(x) }
