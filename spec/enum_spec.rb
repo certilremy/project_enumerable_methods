@@ -170,4 +170,25 @@ describe Enumerable do
       expect(hashnum.my_none? { |_k, v| v.is_a? Integer }).to eq(false)
     end
   end
+
+  describe 'my_count' do
+    it 'block not given array' do
+      expect(oft.my_count).to eq(3)
+    end
+    it 'block not given hash' do
+      expect({ a: 1, b: 2, c: 0, d: 5 }.my_count).to eq(4)
+    end
+    it 'counts array' do
+      expect(oft.my_count { |n| n > 4 }).to eq(1)
+    end
+    it 'counts hash' do
+      expect({ a: 1, b: 2, c: 0, d: 5 }.my_count { |_k, v| v < 5 }).to eq(3)
+    end
+    it 'count with params' do
+      expect(oft.my_count(0)).to eq(0)
+    end
+    it 'count with params, equals' do
+      expect(oft.my_count(2)).to eq(1)
+    end
+  end
 end
