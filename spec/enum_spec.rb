@@ -11,8 +11,7 @@ describe Enumerable do
   let(:ofalset) { [1, false, 2] }
   let(:arrfour) { [1, 2, 4, 5] }
   let(:dogs) { %w[dog dog dog dog] }
-  let(:dogcat) { %w[dog dog cat dog] }
-  let(:arrwords) { %w[dog door rod blade] }
+  let(:hashnum) { { a: 1, b: 2, c: 0 } }
 
   describe '#my_each' do
     it 'return enumerator if block not given' do
@@ -44,7 +43,7 @@ describe Enumerable do
     end
 
     it 'loops an entire hash' do
-      { a: 1, b: 2, c: 0 }.my_each_with_index { |(k, v), idx| empyt_hash[k] = v + idx }
+      hashnum.my_each_with_index { |(k, v), idx| empyt_hash[k] = v + idx }
       expect(empyt_hash).to eq(a: 1, b: 3, c: 2)
     end
   end
@@ -78,7 +77,7 @@ describe Enumerable do
       expect(dogs.my_all?('dog')).to eq(true)
     end
     it 'pattern other than a Class or Regex, false' do
-      expect(dogcat.my_all?('dog')).to eq(false)
+      expect(%w[dog dog cat dog].my_all?('dog')).to eq(false)
     end
     it 'class given, all the elements from that class' do
       expect(ofe.my_all?(Integer)).to eq(true)
@@ -93,10 +92,10 @@ describe Enumerable do
       expect(arrfour.my_all? { |n| n >= 1 }).to eq(true)
     end
     it 'all with hash false' do
-      expect({ a: 1, b: 2, c: 0 }.my_all? { |_k, v| v == 2 }).to eq(false)
+      expect(hashnum.my_all? { |_k, v| v == 2 }).to eq(false)
     end
     it 'all with hash true' do
-      expect({ a: 1, b: 2, c: 0 }.my_all? { |_k, v| v.is_a? Integer }).to eq(true)
+      expect(hashnum.my_all? { |_k, v| v.is_a? Integer }).to eq(true)
     end
   end
 
@@ -110,7 +109,7 @@ describe Enumerable do
     end
 
     it 'pattern other than a Class or Regex' do
-      expect(arrwords.my_any?('dog')).to eq(true)
+      expect(dogs.my_any?('dog')).to eq(true)
     end
 
     it 'class given, any of the elements from that class' do
@@ -130,11 +129,11 @@ describe Enumerable do
     end
 
     it 'any with hash false' do
-      expect({ a: 1, b: 2, c: 0 }.my_any? { |_k, v| v > 20 }).to eq(false)
+      expect(hashnum.my_any? { |_k, v| v > 20 }).to eq(false)
     end
 
     it 'any with hash true' do
-      expect({ a: 1, b: 2, c: 0 }.my_any? { |_k, v| v.is_a? Integer }).to eq(true)
+      expect(hashnum.my_any? { |_k, v| v.is_a? Integer }).to eq(true)
     end
   end
 
@@ -165,10 +164,10 @@ describe Enumerable do
       expect(%w[ant bear cat].none? { |word| word.length >= 4 }).to eq(false)
     end
     it 'none with hash true' do
-      expect({ a: 1, b: 2, c: 0 }.my_none? { |_k, v| v == 7 }).to eq(true)
+      expect(hashnum.my_none? { |_k, v| v == 7 }).to eq(true)
     end
     it 'none with hash false' do
-      expect({ a: 1, b: 2, c: 0 }.my_none? { |_k, v| v.is_a? Integer }).to eq(false)
+      expect(hashnum.my_none? { |_k, v| v.is_a? Integer }).to eq(false)
     end
   end
 end
