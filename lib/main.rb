@@ -2,12 +2,12 @@ module Enumerable
   def my_each
     return enum_for(:my_each) unless block_given?
 
-    element = 0
-    while element < length
-      yield(self[element])
-      element += 1
+    return_array = to_a
+
+    (0...return_array.length).each do |i|
+      return_array[i] = yield(return_array[i])
     end
-    self
+    return_array
   end
 
   def my_each_with_index
